@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+	xmlns:layout="http://www.ultraq.net.nz/web/thymeleaf/layout"
+	layout:decorator="layout">
+	<head>
+		<title>Order</title>
+	</head>
+	<body>
+		<h1 layout:fragment="header">
+			<span class="icon order-icon"></span>
+			<span class="iconed-title">Order</span>
+		</h1>
+		<div layout:fragment="content" class="container">
+			<div class="row">
+				<div class="col-md-2"><b>Customer</b></div>
+				<div class="col-md-2" th:text="${@customerClient.getOne(order.customerId).firstname} + ' ' + ${@customerClient.getOne(order.customerId).name}"></div>
+			</div>
+			<div class="row">
+				<div class="col-md-2 col-md-offset-1"><b>Ordered products</b></div>
+			</div>
+			<table>
+				<thead>
+					<tr>
+						<th>Product</th>
+						<th>Quantity</th>
+						<th>Price</th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr th:each="orderLine : ${order.orderLine}">
+						<td th:text="${@catalogClient.getOne(orderLine.itemId).name}"></td>
+						<td th:text="${orderLine.count}"></td>
+						<td><span th:text="${@catalogClient.getOne(orderLine.itemId).price}"></span> €</td>
+					</tr>
+				</tbody>
+			</table>
+			<div class="row">
+				<div class="col-md-2"><b>Total price</b></div>
+				<div class="col-md-2"><span th:text="${order.totalPrice(@catalogClient)}"></span> €</div>
+			</div>
+		</div>
+	</body>
+</html>

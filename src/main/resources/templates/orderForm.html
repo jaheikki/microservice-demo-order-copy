@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+	xmlns:layout="http://www.ultraq.net.nz/web/thymeleaf/layout"
+	layout:decorator="layout">
+	<head>
+		<title>Create Order</title>
+	</head>
+	<body>
+		<h1 layout:fragment="header">
+			<span class="icon order-icon"></span>
+			<span class="iconed-title">Create Order</span>
+		</h1>
+		<div layout:fragment="content" class="container">
+			<form action="." th:object="${order}" method="post" role="form">
+				<div class="form-group">
+					<label for="selectCustomer">Customer</label>
+					<select name="selectCustomer" th:field="*{customerId}">
+						<option th:each="customer : ${customers}"
+							th:text="${customer.firstname}+' '+${customer.name}"
+							th:value="${customer.customerId}" value="42" >Rod Johnson</option>
+					</select>
+				</div>
+				<div class="row">
+					<button type="submit" id="addItem" name="addLine" formaction="./line" class="btn btn-default">Add Item</button>
+				</div>
+				<table>
+					<thead>
+						<tr class="row">
+							<th class="col-xs-2">ID</th>
+							<th class="col-xs-2">Product</th>
+							<th class="col-xs-2">Count</th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr th:each="orderLine, orderLineStat : *{orderLine}">
+							<td class="col-xs-2" th:text="${orderLineStat.count}">1</td>
+							<td class="col-xs-2">
+								<select th:field="*{orderLine[__${orderLineStat.index}__].itemId}">
+									<option th:each="item : ${items}" th:text="${item.name}" th:value="${item.itemId}" value="42" >MacBook</option>
+								</select>
+							</td>
+							<td class="col-xs-2">
+								<input type="number" th:field="*{orderLine[__${orderLineStat.index}__].count}" />
+							</td>
+						</tr>
+					</tbody>
+				</table>
+				<!--
+				<div class="row">
+					<div class="col-xs-2">
+						<label>Id</label>
+					</div>
+					<div class="col-xs-2">
+						<label>Count</label>
+					</div>
+					<div class="col-xs-2">
+						<label>Item</label>
+					</div>
+				</div>
+				<div class="row" th:each="orderLine, orderLineStat : *{orderLine}">
+					<div class="col-xs-2" th:text="${orderLineStat.count}">1</div>
+					<div class="col-xs-2">
+						<input type="text"
+							th:field="*{orderLine[__${orderLineStat.index}__].count}" />
+					</div>
+					<div class="col-xs-2">
+						<select
+							th:field="*{orderLine[__${orderLineStat.index}__].itemId}">
+							<option th:each="item : ${items}" th:text="${item.name}"
+								th:value="${item.itemId}" value="42" >MacBook</option>
+						</select>
+					</div>
+				</div>
+				-->
+				<div class="row">
+					<button type="submit" id="createOrder" name="submit" class="btn btn-default">Create Order</button>
+				</div>
+			</form>
+		</div>
+	</body>
+</html>

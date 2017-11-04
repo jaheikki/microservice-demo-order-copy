@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+	xmlns:layout="http://www.ultraq.net.nz/web/thymeleaf/layout"
+	layout:decorator="layout">
+	<head>
+		<title>Orders</title>
+	</head>
+	<body>
+		<h1 layout:fragment="header">
+			<span class="icon orders-icon"></span>
+			<span class="iconed-title">Orders</span>
+		</h1>
+		<div layout:fragment="content" class="container">
+			<div class="row">
+				<div class="col-md-4">
+					<a class="button" id="addOrder" href="form.html">Add Order</a>
+				</div>
+			</div>
+			<table class="table table-bordered table-striped">
+				<thead>
+					<tr>
+						<th>ID</th>
+						<th>Customer</th>
+						<th>Total Price</th>
+						<th></th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr th:if="${orders.empty}">
+						<td colspan="4">No orders</td>
+					</tr>
+					<tr th:each="order : ${orders}">
+						<td>
+							<a href="order/1" th:href="${order.id}" th:text="${order.id}">1</a>
+						</td>
+						<td th:text="${@customerClient.getOne(order.customerId).firstname} + ' ' + ${@customerClient.getOne(order.customerId).name}">
+							First name
+							Last name
+						</td>
+						<td>
+							<span th:text="${order.totalPrice(@catalogClient)}">42.0</span> €
+						</td>
+						<td>
+							<form th:action="'/order/ui/'+${order.id}" th:method="delete">
+								<input type="submit" id="deleteOrder" value="delete" class="btn btn-link delete" />
+							</form>
+						</td>
+					</tr>
+				</tbody>
+			</table>
+		</div>
+	</body>
+</html>
